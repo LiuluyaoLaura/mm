@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mirror Me - Complete Product Deck</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #020617; /* Slate 950 - Stage Background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 80px; /* Gap between slides */
+            padding: 80px 0;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            color: #0f172a;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        /* --- Unified Slide Container (16:9) --- */
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #f8fafc; /* Slate 50 - Slide Background */
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5); /* Deep Shadow */
+            display: flex;
+            flex-direction: column;
+            border-radius: 24px;
+            flex-shrink: 0;
+        }
+
+        /* --- Shared Animations --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0; 
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-500 { animation-delay: 500ms; }
+        .delay-700 { animation-delay: 700ms; }
+
+        /* Floating Orbs */
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+            opacity: 0.6;
+            animation: float 12s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        /* --- SLIDE 1 Specifics (Homepage) --- */
+        .orb-1 { width: 700px; height: 700px; background: rgba(233, 213, 255, 0.6); top: -200px; left: -100px; }
+        .orb-2 { width: 600px; height: 600px; background: rgba(254, 205, 211, 0.5); bottom: -150px; right: -150px; animation-delay: -5s; }
+        .orb-3 { width: 400px; height: 400px; background: rgba(219, 234, 254, 0.5); top: 30%; left: 50%; animation-delay: -2s; }
+        
+        .mirror-gradient {
+            background: linear-gradient(135deg, #7c3aed, #db2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .mirror-text { position: relative; display: inline-block; }
+        .mirror-text::after {
+            content: attr(data-text);
+            position: absolute; left: 0; top: 100%;
+            transform: scaleY(-1) translateY(-15px) skewX(-10deg);
+            background: linear-gradient(to bottom, rgba(124, 58, 237, 0.15), transparent);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            opacity: 0.6; pointer-events: none; filter: blur(2px);
+        }
+
+        /* --- SLIDE 2 Specifics (Typewriter) --- */
+        .cursor {
+            display: inline-block; width: 3px; height: 1em;
+            background-color: #7c3aed; margin-left: 5px;
+            animation: blink 1s step-end infinite; vertical-align: middle;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* --- SLIDE 3 Specifics (Positioning) --- */
+        .pain-point-box {
+            background: linear-gradient(to bottom right, #f1f5f9, #e2e8f0);
+            border: 1px solid #cbd5e1;
+        }
+        .solution-box {
+            background: linear-gradient(to bottom right, #fdf4ff, #fae8ff);
+            border: 1px solid #e9d5ff;
+        }
+
+        /* --- SLIDE 4 & 5 Specifics (Scrollbar) --- */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.2); }
+
+        /* --- SLIDE 5 Specifics (Report - Fluid Shape) --- */
+        @keyframes morph {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+        .fluid-shape {
+            animation: morph 8s ease-in-out infinite;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            opacity: 0.15;
+        }
+        .report-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px -10px rgba(148, 163, 184, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="absolute top-0 right-0 w-2/3 h-full bg-white/40 -skew-x-12 translate-x-1/4 pointer-events-none z-0"></div>
+
+    <div class="absolute top-10 left-10 z-20 animate-fade-up">
+        <div class="flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur border border-purple-100 shadow-sm hover:shadow-md transition-all cursor-default group">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-rose-500 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                <i data-lucide="sparkles" class="text-white w-4 h-4"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Created By</span>
+                <span class="text-sm font-bold text-slate-800 group-hover:text-purple-700 transition-colors">搞点好东西队</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative z-10 flex flex-col justify-center items-center h-full pb-16">
+        <div class="mb-10 flex justify-center animate-fade-up delay-100">
+            <div class="w-24 h-24 rounded-3xl bg-white shadow-xl border border-white/50 flex items-center justify-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-white opacity-100"></div>
+                <div class="absolute inset-0 bg-gradient-to-tr from-purple-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <i data-lucide="scan-face" class="w-12 h-12 text-purple-600 relative z-10 group-hover:scale-110 transition-transform duration-500"></i>
+            </div>
+        </div>
+
+        <h1 class="text-9xl font-serif font-bold mb-4 tracking-tighter leading-none animate-fade-up delay-200 drop-shadow-sm">
+            <span class="mirror-text mirror-gradient" data-text="Mirror Me">Mirror Me</span>
+        </h1>
+
+        <div class="flex items-center justify-center gap-6 mt-8 mb-12 animate-fade-up delay-300">
+            <span class="h-px w-16 bg-gradient-to-r from-transparent to-purple-200"></span>
+            <p class="text-3xl font-light text-slate-600 serif tracking-wide">
+                在 ta 的故事里，<span class="font-normal text-purple-700">看见自己</span>
+            </p>
+            <span class="h-px w-16 bg-gradient-to-l from-transparent to-purple-200"></span>
+        </div>
+
+        <div class="animate-fade-up delay-500">
+            <button class="group relative px-10 py-3 bg-slate-900 text-white rounded-full font-bold text-base overflow-hidden transition-all hover:bg-slate-800 hover:shadow-xl hover:-translate-y-1 shadow-lg shadow-purple-900/10">
+                <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-rose-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                <span class="relative flex items-center gap-2">
+                    开启觉察之旅 <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <div class="absolute bottom-0 w-full border-t border-slate-100 bg-white/50 backdrop-blur-md py-8 animate-fade-up delay-700">
+        <div class="max-w-6xl mx-auto flex justify-center gap-32">
+            <div class="flex flex-col items-center gap-2 group cursor-default">
+                <i data-lucide="film" class="w-5 h-5 text-purple-500"></i>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">电影沉浸</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 group cursor-default">
+                <i data-lucide="eye" class="w-5 h-5 text-rose-500"></i>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">心理投射</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 group cursor-default">
+                <i data-lucide="refresh-cw" class="w-5 h-5 text-blue-500"></i>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">自我重构</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <div class="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-bl from-purple-50 to-transparent skew-x-12 origin-top-right z-0"></div>
+    <div class="floating-bubble bg-purple-200 w-64 h-64 top-20 right-20"></div>
+    <div class="floating-bubble bg-blue-100 w-48 h-48 bottom-20 left-20"></div>
+
+    <div class="relative z-10 px-16 pt-16 pb-6 flex justify-between items-start">
+        <div>
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-[10px] font-bold tracking-widest uppercase rounded-md border border-purple-200">
+                    User Pain Points
+                </span>
+            </div>
+            <h1 class="text-4xl font-serif font-bold text-slate-900 leading-tight">
+                我们听到的<br>
+                <span class="text-purple-600">内心杂音</span>
+            </h1>
+        </div>
+        <div class="text-right max-w-sm">
+            <p class="text-slate-500 text-sm leading-relaxed">
+                在父权制结构与社会规训下，女性常将结构性问题内化为自我攻击。我们的产品第一步，就是识别这些声音。
+            </p>
+        </div>
+    </div>
+
+    <div class="relative z-10 flex-1 flex flex-col items-center justify-center pb-20">
+        <div class="w-full max-w-4xl text-center">
+            <p class="text-slate-400 text-lg mb-6 font-serif italic">
+                “深夜里，我经常问自己...”
+            </p>
+            <div class="h-32 flex items-center justify-center">
+                <h2 class="text-6xl font-serif font-bold text-slate-800 leading-tight">
+                    <span id="typewriter-text" class="bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700"></span><span class="cursor">&nbsp;</span>
+                </h2>
+            </div>
+            <div class="mt-12 flex justify-center gap-4 opacity-0 transition-opacity duration-1000" id="tags-container">
+                <span class="px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-500 text-xs font-medium shadow-sm flex items-center gap-2">
+                    <i data-lucide="alert-circle" size="14" class="text-purple-500"></i> 内化厌女
+                </span>
+                <span class="px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-500 text-xs font-medium shadow-sm flex items-center gap-2">
+                    <i data-lucide="shield-alert" size="14" class="text-rose-500"></i> 冒充者综合征
+                </span>
+                <span class="px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-500 text-xs font-medium shadow-sm flex items-center gap-2">
+                    <i data-lucide="frown" size="14" class="text-blue-500"></i> 完美主义陷阱
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative z-10 px-16 pb-8 flex justify-between items-center text-slate-400 text-xs border-t border-slate-100 pt-6 mx-16">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></div>
+            <span class="font-mono tracking-wider uppercase">Problem Definition</span>
+        </div>
+        <div class="flex gap-6 font-medium">
+            <span>Feminist Perspective</span>
+            <span>Self-Doubt Analysis</span>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    <div class="absolute top-0 left-0 w-full h-full bg-white"></div>
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-purple-50/50 to-transparent pointer-events-none"></div>
+
+    <div class="relative z-10 px-16 pt-16 pb-6 flex justify-between items-start">
+        <div>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-[10px] font-bold tracking-widest uppercase rounded-md border border-purple-200">
+                    Product Value
+                </span>
+            </div>
+            <h1 class="text-4xl font-serif font-bold text-slate-900 leading-tight">
+                AI自我觉察<br>
+                <span class="text-purple-600">从痛点到解法：为什么是电影？</span>
+            </h1>
+        </div>
+        <div class="text-right max-w-md">
+            <h2 class="text-lg text-slate-600 font-serif italic leading-relaxed animate-fade-up">
+                “解决传统 AI 陪伴类产品的‘冷启动’难题，<br>用叙事替代问卷，用投射替代自述。”
+            </h2>
+        </div>
+    </div>
+
+    <div class="relative z-10 flex-1 px-16 flex flex-col justify-center pb-8">
+        
+        <div class="flex gap-8 mb-10 items-stretch">
+            
+            <div class="flex-1 pain-point-box p-8 rounded-2xl animate-fade-up delay-100 flex flex-col relative overflow-hidden group">
+                <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="file-warning" size="100"></i>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-slate-200 rounded-lg flex items-center justify-center text-slate-600">
+                        <i data-lucide="upload-cloud" size="20"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-700 serif">上下文的缺失</h3>
+                </div>
+                <p class="text-sm text-slate-500 leading-relaxed mb-4">
+                    传统 AI 并不懂你。为了获得有效的疗愈，你需要费劲地上传大量日记、对话记录。
+                </p>
+                <div class="mt-auto pt-4 border-t border-slate-300/50">
+                    <span class="text-xs font-bold text-slate-600 uppercase tracking-wide flex items-center gap-2">
+                        <i data-lucide="frown" size="14"></i> 极高的“倾诉成本”
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center text-slate-300 animate-pulse">
+                <i data-lucide="arrow-right" size="32"></i>
+            </div>
+
+            <div class="flex-1 solution-box p-8 rounded-2xl animate-fade-up delay-200 flex flex-col relative overflow-hidden group border-2 border-purple-200 shadow-lg">
+                <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="sparkles" size="100" class="text-purple-500"></i>
+                </div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center text-white shadow-md">
+                        <i data-lucide="film" size="20"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-purple-900 serif">叙事的魔法</h3>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                    电影是天然的投射容器。通过引导你进入具体情境：如何理解角色的选择？如何判断欲望的边界？
+                </p>
+                <div class="mt-auto pt-4 border-t border-purple-200">
+                    <span class="text-xs font-bold text-purple-700 uppercase tracking-wide flex items-center gap-2">
+                        <i data-lucide="smile" size="14"></i> 有趣、低门槛、高投射
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="animate-fade-up delay-300">
+            <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-lg relative overflow-hidden flex items-center gap-8">
+                <div class="w-1.5 h-full absolute left-0 top-0 bg-gradient-to-b from-purple-500 to-rose-500"></div>
+                <div class="flex-shrink-0 ml-2">
+                     <div class="w-14 h-14 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400">
+                        <i data-lucide="scroll-text" size="24"></i>
+                     </div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">The Deliverable</span>
+                        <span class="px-2 py-0.5 bg-purple-100 text-purple-600 text-[10px] font-bold rounded">No Judgment</span>
+                    </div>
+                    <p class="text-lg text-slate-800 font-serif leading-relaxed">
+                        “最终生成的报告，并不是在衡量女性做得好不好，而是帮她看见：<br>
+                        <span class="font-bold text-purple-700 bg-purple-50 px-1 rounded inline-block mt-1">她是怎样的自己。</span>”
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative z-10 px-16 pb-8 flex justify-between items-center text-slate-400 text-xs border-t border-slate-100 pt-6 mx-16">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-purple-600 rounded-full"></div>
+            <span class="font-mono tracking-wider uppercase">Differentiation</span>
+        </div>
+        <div class="flex gap-6 font-medium">
+            <span>Context-Aware</span>
+            <span>Narrative Therapy</span>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    
+    <div class="absolute top-0 right-0 w-2/3 h-full bg-slate-50 -skew-x-12 translate-x-1/4 pointer-events-none"></div>
+
+    <div class="relative z-10 px-16 pt-12 pb-6 flex justify-between items-end">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+           <span class="px-2 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold tracking-widest uppercase rounded-md">
+             Desktop Experience
+           </span>
+        </div>
+        <h1 class="text-4xl font-serif font-medium text-slate-900 leading-tight">
+          桌面端：<span class="text-purple-700">沉浸式情景觉察</span>
+        </h1>
+        <p class="text-slate-500 mt-2 text-sm max-w-xl">
+          左侧用高光剧照唤起情节记忆，右侧引导式问答，在静谧中完成深度心理投射。
+        </p>
+      </div>
+    </div>
+
+    <div class="relative z-10 flex-1 px-16 pb-12 flex items-center justify-center">
+      
+      <div class="relative w-[800px] aspect-[16/10] bg-slate-900 rounded-t-2xl shadow-2xl border-[12px] border-slate-800 flex flex-col overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-4 bg-slate-800 rounded-b-lg z-50 flex justify-center items-center">
+           <div class="w-1.5 h-1.5 bg-slate-700 rounded-full"></div>
+        </div>
+
+        <div class="flex-1 bg-slate-950 flex overflow-hidden">
+          
+          <div class="w-[65%] relative group bg-black overflow-hidden flex flex-col justify-end">
+            <img 
+              src="xiaoye.jpg"
+              alt="Movie Still"
+              referrerPolicy="no-referrer"
+              class="absolute inset-0 w-full h-full object-cover object-[0%_20%] scale-110 opacity-90 contrast-110 transition-transform duration-[20s] ease-linear group-hover:scale-125"
+              onerror="this.style.display='none'; this.nextElementSibling.style.background='linear-gradient(to bottom right, #1e1b4b, #4c1d95)';"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/20 to-transparent"></div>
+            
+            <div class="absolute top-6 left-6 z-20">
+                <span class="px-2 py-1 rounded border border-white/20 bg-black/20 backdrop-blur text-[10px] text-slate-300 font-bold tracking-widest uppercase">
+                    Memory Flashback
+                </span>
+            </div>
+
+            <div class="relative z-20 p-8 pb-12">
+              <div class="mb-4 w-8 h-0.5 bg-purple-500"></div>
+              <p class="text-white text-2xl font-serif italic drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] tracking-wide leading-relaxed">
+                “我不想为了被爱而演戏，<br/>但我又怕如果不演，我就什么都不是了。”
+              </p>
+              <p class="text-slate-400 text-xs mt-4 uppercase tracking-widest font-bold">
+                SCENE 01 — 小叶的独白
+              </p>
+            </div>
+          </div>
+
+          <div class="w-[35%] bg-slate-900 border-l border-white/5 flex flex-col relative z-20 overflow-hidden">
+            
+            <div class="h-16 border-b border-white/5 flex items-center px-6 bg-white/[0.02]">
+              <span class="text-xs font-bold text-purple-400 uppercase tracking-widest flex items-center gap-2">
+                <i data-lucide="feather" size="14"></i> 深度觉察
+              </span>
+            </div>
+
+            <div class="flex-1 p-6 overflow-y-auto custom-scrollbar">
+               <div class="mb-8">
+                 <h3 class="text-slate-200 font-medium text-sm leading-relaxed mb-6 font-serif">
+                   小叶为了让胡医生觉得自己“特别”，故意扮演一个破碎的、离不开他的女孩，你觉得这种“表演”对她来说意味着什么？
+                 </h3>
+                 
+                 <div class="space-y-3">
+                   <div class="group cursor-pointer">
+                     <div class="p-4 rounded-xl bg-white/5 border border-white/10 group-hover:bg-purple-500/10 group-hover:border-purple-500/50 transition-all duration-300">
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 font-serif text-lg italic opacity-50 group-hover:opacity-100">A.</span>
+                            <div>
+                                <span class="text-slate-200 text-xs font-bold block mb-1">这是她的策略</span>
+                                <span class="text-slate-400 text-[10px] leading-tight block">“我知道游戏规则。他想要什么样的女孩，我就演什么样。反正最后，我拿到我要的。”</span>
+                            </div>
+                        </div>
+                     </div>
+                   </div>
+
+                   <div class="group cursor-pointer relative">
+                     <div class="absolute -left-0.5 top-2 bottom-2 w-1 bg-purple-500 rounded-r"></div>
+                     <div class="p-4 rounded-xl bg-gradient-to-r from-purple-900/30 to-transparent border border-purple-500/30 shadow-[0_4px_20px_-5px_rgba(147,51,234,0.15)]">
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 font-serif text-lg italic">B.</span>
+                            <div>
+                                <span class="text-white text-xs font-bold block mb-1">这让她感到被需要</span>
+                                <span class="text-slate-300 text-[10px] leading-tight block">“当他看着我，觉得我离不开他的时候，我感觉自己终于被看见了。被需要的感觉，很真实。”</span>
+                            </div>
+                        </div>
+                     </div>
+                   </div>
+
+                   <div class="group cursor-pointer">
+                     <div class="p-4 rounded-xl bg-white/5 border border-white/10 group-hover:bg-purple-500/10 group-hover:border-purple-500/50 transition-all duration-300">
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 font-serif text-lg italic opacity-50 group-hover:opacity-100">C.</span>
+                            <div>
+                                <span class="text-slate-200 text-xs font-bold block mb-1">她分不清哪个是真的自己</span>
+                                <span class="text-slate-400 text-[10px] leading-tight block">“装久了，就忘了哪些是装的。可能演着演着，假的就变真的了。或者，真的也变假的了。”</span>
+                            </div>
+                        </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+               <div class="flex items-center justify-between pt-4 border-t border-white/5 opacity-50">
+                  <span class="text-[9px] text-slate-400 uppercase tracking-widest">Question 1/10</span>
+                  <div class="flex gap-1">
+                      <div class="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                      <div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>
+                      <div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>
+                  </div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative z-10 px-16 pb-8 flex justify-between items-center text-slate-400 text-xs border-t border-slate-100 pt-6 mx-16">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-purple-600 rounded-full"></div>
+            <span class="font-mono tracking-wider uppercase">Value Proposition</span>
+        </div>
+        <div class="flex gap-6 font-medium">
+            <span>Identity Reconstruction</span>
+            <span>AI-Powered Insight</span>
+        </div>
+    </div>
+</div>
+
+<div class="slide-container">
+    
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/40 to-transparent pointer-events-none"></div>
+
+    <div class="relative z-10 px-16 pt-12 pb-4 flex justify-between items-end">
+        <div>
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-[10px] font-bold tracking-widest uppercase rounded-md border border-purple-200">
+                    The Outcome
+                </span>
+            </div>
+            <h1 class="text-4xl font-serif font-bold text-slate-900 leading-tight">
+                你的<br>
+                <span class="text-purple-600">自我觉察图谱</span>
+            </h1>
+        </div>
+        <div class="text-right max-w-md">
+            <h2 class="text-lg text-slate-500 font-serif italic leading-relaxed animate-fade-up">
+                “这不是一份判决书，<br>而是一份帮你夺回解释权的说明书。”
+            </h2>
+        </div>
+    </div>
+
+    <div class="relative z-10 flex-1 px-16 flex items-center justify-center pb-12 gap-12">
+        
+        <div class="w-1/3 flex flex-col items-center justify-center animate-fade-up delay-100 relative">
+            <div class="w-80 h-80 fluid-shape absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+            <div class="w-72 h-72 fluid-shape absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animation-delay-2000" style="animation-direction: reverse; opacity: 0.1;"></div>
+            
+            <div class="relative z-10 text-center">
+                <div class="w-24 h-24 rounded-full bg-white shadow-xl flex items-center justify-center mb-6 mx-auto border-4 border-purple-50">
+                    <i data-lucide="feather" class="w-10 h-10 text-purple-600"></i>
+                </div>
+                <h3 class="text-2xl font-serif font-bold text-slate-800 mb-2">流动的观察者</h3>
+                <p class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-4">Archetype: The Fluid Observer</p>
+                
+                <div class="flex flex-wrap justify-center gap-2 max-w-[200px]">
+                    <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold"># 柔性解构</span>
+                    <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold"># 边界模糊</span>
+                    <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold"># 向内归因</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-2/3 h-[420px] report-card rounded-2xl p-8 animate-fade-up delay-300 flex flex-col relative overflow-hidden">
+            
+            <div class="absolute top-6 right-8 text-purple-100">
+                <i data-lucide="quote" size="64" class="fill-current rotate-180"></i>
+            </div>
+
+            <div class="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-8 relative z-10">
+                
+                <div>
+                    <h4 class="flex items-center gap-2 text-sm font-bold text-slate-400 uppercase tracking-widest mb-3">
+                        <i data-lucide="scan-face" size="14"></i> 深度侧写
+                    </h4>
+                    <p class="text-lg text-slate-800 font-serif leading-relaxed">
+                        你像<span class="text-purple-700 font-bold bg-purple-50 px-1 rounded">茉莉</span>一样，拥有跳出框架审视一切的能力。面对冲突，你既不盲目反抗，也不盲目顺从，而是选择在缝隙中生长。这种“抽离”是你保护自己的盾牌，但有时也让你感觉离真实的生活隔了一层玻璃。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="p-4 bg-slate-50/80 rounded-xl border border-slate-100">
+                        <div class="flex items-center gap-2 mb-2 text-rose-600">
+                            <i data-lucide="shield-alert" size="16"></i>
+                            <span class="text-xs font-bold uppercase">你的防御机制</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            当面对“爹味”说教或权威施压时，你习惯用<strong class="text-slate-800">“戏谑与幽默”</strong>来消解攻击性。这让你显得从容，但也可能在掩饰内心的愤怒。
+                        </p>
+                    </div>
+                    <div class="p-4 bg-slate-50/80 rounded-xl border border-slate-100">
+                        <div class="flex items-center gap-2 mb-2 text-blue-600">
+                            <i data-lucide="anchor" size="16"></i>
+                            <span class="text-xs font-bold uppercase">你的价值锚点</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            你的安全感并不来自外界的认可（如职位、金钱），而更多来自<strong class="text-slate-800">“自我逻辑的自洽”</strong>。只要你自己觉得合理，世界怎么说并不重要。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100">
+                    <h4 class="flex items-center gap-2 text-sm font-bold text-purple-600 uppercase tracking-widest mb-3">
+                        <i data-lucide="sparkles" size="14"></i> 给你的女性主义处方
+                    </h4>
+                    <ul class="space-y-3">
+                        <li class="flex gap-3 text-sm text-slate-700">
+                            <div class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></div>
+                            <span>允许自己有时候“不想赢”，<strong class="text-purple-700">“做观众”</strong>也是一种主动的选择权利。</span>
+                        </li>
+                        <li class="flex gap-3 text-sm text-slate-700">
+                            <div class="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 shrink-0"></div>
+                            <span>试着分辨：现在的冷漠是因为真的不在乎，还是因为害怕一旦投入就会失控？</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-6 mt-2 border-t border-slate-100 flex justify-between items-center">
+                <div class="flex -space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-purple-100 border-2 border-white flex items-center justify-center text-[10px] text-purple-600 font-bold">A</div>
+                    <div class="w-8 h-8 rounded-full bg-rose-100 border-2 border-white flex items-center justify-center text-[10px] text-rose-600 font-bold">B</div>
+                    <div class="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] text-slate-500 font-bold">+</div>
+                </div>
+                <div class="flex gap-3">
+                    <button class="px-4 py-2 text-slate-500 text-xs font-bold hover:text-slate-800 transition-colors flex items-center gap-2">
+                        <i data-lucide="download" size="14"></i> 保存长图
+                    </button>
+                    <button class="px-6 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-700 transition-colors flex items-center gap-2 shadow-lg">
+                        <i data-lucide="share-2" size="14"></i> 分享给朋友
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="relative z-10 px-16 pb-8 flex justify-between items-center text-slate-400 text-xs border-t border-slate-100 pt-6 mx-16">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></div>
+            <span class="font-mono tracking-wider uppercase">Final Output</span>
+        </div>
+        <div class="flex gap-6 font-medium">
+            <span>Mirror Me</span>
+            <span>Self-Reconstruction Report</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // --- Typewriter Logic (Slide 2) ---
+    const textElement = document.getElementById('typewriter-text');
+    const tagsContainer = document.getElementById('tags-container');
+    const phrases = [
+        "我是不是不够好？",
+        "是不是我太“强势”了？",
+        "我真的配得上这些吗？",
+        "如果我不再完美，还会被爱吗？",
+        "这是我的错吗？"
+    ];
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typeSpeed = 100;
+
+    function type() {
+        const currentPhrase = phrases[phraseIndex];
+        
+        if (isDeleting) {
+            textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+            charIndex--;
+            typeSpeed = 50; 
+        } else {
+            textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+            charIndex++;
+            typeSpeed = 150; 
+        }
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+            isDeleting = true;
+            typeSpeed = 2000; 
+            if (phraseIndex === 0 && tagsContainer) {
+                tagsContainer.style.opacity = '1';
+            }
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            typeSpeed = 500; 
+        }
+        setTimeout(type, typeSpeed);
+    }
+
+    // Start typing
+    document.addEventListener('DOMContentLoaded', () => {
+        if(textElement) setTimeout(type, 1000);
+    });
+</script>
+
+</body>
+</html>
